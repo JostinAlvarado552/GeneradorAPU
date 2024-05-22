@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualización de Result 1</title>
+</head>
+<body>
+    <h1>Visualización de Result 1</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Enviar</button>
+    </form>
+
+    <hr>
+
+    {% if result1 %}
+        {% if result1.error %}
+            <p>Error: {{ result1.error }}</p>
+        {% else %}
+            <h2>Datos de Result 1:</h2>
+            <table border="1">
+                <tr>
+                    <th>Celda</th>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                </tr>
+                {% for cell, data in result1.items %}
+                    <tr>
+                        <td>{{ cell }}</td>
+                        <td>{{ data.nombre }}</td>
+                        <td>{{ data.cantidad }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    {% endif %}
+</body>
+</html>

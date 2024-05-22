@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rubro {{ rubro.id }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1, h2, h3, p {
+            page-break-inside: avoid;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rubro ID: {{ rubro.id }}</h1>
+    <p><strong>Concepto:</strong> {{ rubro.concepto }}</p>
+    <p><strong>Unidad:</strong> {{ rubro.especificaciones }}</p>
+    <p><strong>Detalles:</strong> {{ detalles }}</p>
+
+    <h2>Definiciones</h2>
+    {% if definiciones %}
+        {% for definicion in definiciones %}
+            <p>{{ definicion.contenido }}</p>
+        {% endfor %}
+    {% else %}
+        <p>No hay definiciones disponibles.</p>
+    {% endif %}
+
+    <h2>Mediciones y Métodos de Pago</h2>
+    {% if medicion_pagos %}
+        {% for mp in medicion_pagos %}
+            <p><strong>Medición:</strong> {{ mp.medicion }}</p>
+            <p><strong>Método de Pago:</strong> {{ mp.metodoPago }}</p>
+        {% endfor %}
+    {% else %}
+        <p>No hay mediciones y métodos de pago disponibles.</p>
+    {% endif %}
+
+    <div class="page-break"></div>
+</body>
+</html>
