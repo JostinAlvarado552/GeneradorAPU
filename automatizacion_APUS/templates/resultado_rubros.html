@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,62 +6,299 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultado de Rubros</title>
     <style>
+
         body {
-            font-family: Arial, sans-serif;
-        }
-        .page {
-            width: 21cm;
-            height: 29.7cm;
-            padding: 1cm;
-            margin: 1cm auto;
+  font-family: Times New Roman, serif;
+}
+        h1, h2, h3 { color: #333; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin-bottom: 10px; }
+        .page-break { page-break-after: always; }
+
+        .rubro-page {
+            width: 794px;
+            height: 1123px;
+            margin: 20px auto;
             border: 1px solid #ccc;
-            box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
-            page-break-after: always;
-            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            position: relative;
         }
-        .page h2, .page h3 {
-            margin: 0.5em 0;
+        .header {
+            width: 794px;
+            display: flex;
+            height: auto;
+            flex-direction: column;
         }
-        .page ul {
-            list-style-type: none;
-            padding: 0;
+        .imagen-texto {
+            width: 794px;
+            display: grid;
+            grid-template-areas:
+                'imagen texto';
+            align-items: center;
         }
-        .page ul li {
-            margin: 0.2em 0;
+        .imagen-izquierda {
+            grid-area: imagen;
+            width: 397px;
         }
+        .imagen-izquierda img {
+            width: 260px;
+            height: auto;
+        }
+        .texto-derecha {
+            grid-area: texto;
+            width: 270px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: bold;
+            background-color: #454142;
+            border-top-left-radius: 25px;
+            color: white;
+            height: 30px;
+            margin: 0;
+            margin-left: auto;
+        }
+        .separador {
+            height: 2px;
+            width: 794px;
+            background-color: black;
+        }
+        .contenido{
+           width: 794px;
+            height: 1003px;
+            margin: auto;
+        }
+        .contenido .fila {
+           width: 794px;
+           display: grid;
+            grid-template-areas: 'gris blanco';
+            grid-template-columns: 190px 600px;
+            border-bottom: solid 1px #858280;
+        }
+        .contenido .fila .gris {
+            background-color: #beb4b3;
+            padding: 10px;
+            grid-area: gris;
+            display: flex;
+            justify-content: right;
+            align-items: center;
+            text-align: right;
+            border-right: solid 1px #858280;
+            text-transform: capitalize;
+        }
+        .contenido .fila .blanco {
+            background-color: transparent;
+            grid-area: blanco;
+            text-align: justify;
+            padding: 5px;
+        }
+
+
+        .fila2 {
+           width: 794px;
+           display: grid;
+            grid-template-areas: 'gris2 blanco2 gris3 blanco3';
+            grid-template-columns: 190px 300px 117px 117px;
+            color: white;
+            height: 40px;
+            align-items: center;
+            border: solid 1px #858280;
+        }
+        .contenido .fila2 .gris2 {
+            background-color: #454142;
+            grid-area: gris2;
+            height: 40px;
+            font-weight: bold;
+             align-items: center;
+            text-align: right;
+            display: flex;
+            justify-content: center;
+        }
+        .contenido .fila2 .blanco2 {
+            background-color: transparent;
+            grid-area: blanco2;
+            color: black;
+            height: 40px;
+             align-items: center;
+            justify-content: center;
+             display: flex;
+        }
+        .contenido .fila2 .gris3 {
+            background-color: #454142;
+            grid-area: gris3;
+            height: 40px;
+            font-weight: bold;
+             align-items: center;
+            text-align: right;
+            display: flex;
+            justify-content: center;
+        }
+        .contenido .fila2 .blanco3 {
+             background-color: transparent;
+            grid-area: blanco3;
+            color: black;
+            height: 40px;
+            display: flex;
+             align-items: center;
+            justify-content: center;
+        }
+
+        .footer {
+            text-align: center;
+            height: 20px;
+            width: 794px;
+            display: flex;
+            align-items: center;
+            justify-content: right;
+            background-color: #282828;
+            color: white;
+        }
+        .marca-agua {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 75%;
+            height: 75%;
+            background-image: url("{% static 'marca_agua.png' %}");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: bottom right;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+.footer{
+    display: grid;
+    grid-template-areas: 'footer texto contador';
+    grid-template-columns: 685px 62px 47px;
+}
+.footera{
+    width: 100%;
+}
+.text-footer {
+    grid-area: texto;
+    width: 100%;
+    height: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 8px;
+    text-align: right;
+}
+.text-footer p {
+    margin: 0;
+    text-align: right;
+}
+
+.page-number{
+    grid-area: contador;
+    width: 80%;
+     height: 20px;
+    background-color: white;
+        border-top-left-radius: 25px;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-weight: bold;
+}
     </style>
 </head>
 <body>
-    <h1>Resultado de Rubros</h1>
     {% if rubros_data %}
         {% for rubro_id, rubro_data in rubros_data.items %}
-            <div class="page">
-                <h2>{{ rubro_data.rubro }}</h2>
-                <h3>Definiciones:</h3>
-                <ul>
-                    {% for definicion in rubro_data.definiciones %}
-                        <li>{{ definicion.contenido }}</li>
-                    {% endfor %}
-                </ul>
-                <h3>Especificaciones:</h3>
-                <ul>
-                    {% for especificacion in rubro_data.especificaciones %}
-                        <li>{{ especificacion.contenido }}</li>
-                    {% endfor %}
-                </ul>
-                <h3>Mediciones y Pagos:</h3>
-                <ul>
-                    {% for medicion_pago in rubro_data.mediciones_pagos %}
-                        <li>Medición: {{ medicion_pago.medicion }}, Método de Pago: {{ medicion_pago.metodoPago }}</li>
-                    {% endfor %}
-                </ul>
-                <h3>Detalles:</h3>
-                <ul>
-                    {% for key, value in rubro_data.detalles.items %}
-                        <li>{{ key }}: {{ value.nombre }}, Cantidad: {{ value.cantidad }}</li>
-                    {% endfor %}
-                </ul>
+            <div class="rubro-page">
+            <div class="marca-agua">
             </div>
+                <div class="header">
+                    <div class="imagen-texto">
+                        <div class="imagen-izquierda">
+                             <img src="{% static 'header_cinthya.png' %}" alt="Cinthya Image">
+                        </div>
+                        <div class="texto-derecha">
+                            Especificaciones Técnicas
+                        </div>
+                    </div>
+                </div>
+                <div class="contenido">
+                    <div class="fila2">
+                        <div class="gris2">
+                            Rubro
+                        </div>
+                        <div class="blanco2">
+                            <ul>
+                                <li> {{ rubro_data.contador }}</li>
+                            </ul>
+                        </div>
+                      <div class="gris3">Unidad</div>
+                        <div class="blanco3">
+                            <ul>
+                               M2
+                            </ul>
+                        </div>
+                    </div>
+                  <div class="fila">
+                        <div class="gris">Nombre del rubro</div>
+                        <div class="blanco">
+                              <ul>
+                                    <li>{{rubro_data.rubro}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="fila">
+                        <div class="gris">Definición</div>
+                        <div class="blanco">
+                            <ul>
+                                {% for definicion in rubro_data.definiciones %}
+                                    <li>{{ definicion.contenido }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="fila">
+                        <div class="gris">Especificaciones</div>
+                        <div class="blanco">
+                            <ul>
+                                {% for especificacion in rubro_data.especificaciones %}
+                                    <li>{{ especificacion.contenido }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="fila">
+                        <div class="gris">Medición y Pago</div>
+                        <div class="blanco">
+                            <ul>
+                                {% for medicion_pago in rubro_data.mediciones_pagos %}
+                                    <li>Medición: {{ medicion_pago.medicion }}, Método de Pago: {{ medicion_pago.metodoPago }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% for key, value in rubro_data.detalles.items %}
+                        <div class="fila">
+                            <div class="gris">{{ key }}</div>
+                            <div class="blanco">
+                                <ul>
+                                    <li>  {{ value.nombre }} -
+                                        Cantidad: {{ value.cantidad }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                                {% endfor %}
+                    </div>
+                <div class="footer">
+                    <div class="text-footer">
+                    <p>Especificaciones</p>
+                        <p>Técnicas</p>
+                        </div>
+                    <div class="page-number">{{ forloop.counter }}</div>
+                </div>
+            </div>
+            <div class="page-break"></div>
         {% endfor %}
     {% else %}
         <p>No se encontraron datos de rubros.</p>

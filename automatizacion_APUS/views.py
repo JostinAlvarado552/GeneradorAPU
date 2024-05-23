@@ -1,47 +1,39 @@
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.http import HttpResponse
-from django.conf import settings
 from docx.opc.oxml import qn, parse_xml
 from docx.oxml.ns import nsdecls
-from openpyxl.reader.excel import load_workbook
-from .forms import IDForm
-from .models import Rubros, Definicion, Medicion_Pago
 from docx import Document
 import xlwings as xw
-from django.shortcuts import render
-from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet
-
-from django.shortcuts import render
 from django.contrib import messages
-
-from django.shortcuts import render
 from .models import Rubros, Definicion, Especificacion, Medicion_Pago
-
 from django.shortcuts import render
-from .models import Rubros, Definicion, Especificacion, Medicion_Pago
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from xhtml2pdf import pisa
+import io
 
 def buscar_rubros(request):
     if request.method == 'POST':
         ids = request.POST.get('ids', '').split(',')
         rubros_data = {}
+        contador = 1  # Inicializa el contador
         for id in ids:
             try:
                 rubro = Rubros.objects.get(id=int(id))
                 definiciones = list(Definicion.objects.filter(rubro=rubro).values('contenido'))
                 especificaciones = list(Especificacion.objects.filter(rubro=rubro).values('contenido'))
                 mediciones_pagos = list(Medicion_Pago.objects.filter(rubro=rubro).values('medicion', 'metodoPago'))
-                detalles = process_id(id)  # Assuming you have a function to process rubro details
+                detalles = process_id(id)
                 rubros_data[id] = {
-                    'rubro': rubro.categoria,  # Usar los campos relevantes del rubro
+                    'contador': f'{contador:03d}',
+                    'rubro': rubro.concepto,
                     'definiciones': definiciones,
                     'especificaciones': especificaciones,
                     'mediciones_pagos': mediciones_pagos,
                     'detalles': detalles,
                 }
+                contador += 1
             except Rubros.DoesNotExist:
                 messages.error(request, f"No se encontró el rubro con ID {id}")
             except Exception as e:
@@ -50,12 +42,20 @@ def buscar_rubros(request):
         context = {
             'rubros_data': rubros_data,
         }
+        # html_string = render_to_string('resultado_rubros.html', context)
+        # result = io.BytesIO()
+        # pdf = pisa.CreatePDF(io.BytesIO(html_string.encode("UTF-8")), dest=result)
+        #
+        # if not pdf.err:
+        #     response = HttpResponse(result.getvalue(), content_type='application/pdf')
+        #     response['Content-Disposition'] = 'attachment; filename="rubros.pdf"'
+        #     return response
+        # else:
+        #     return HttpResponse("Error generating PDF", status=500)
         print(context)
         return render(request, 'resultado_rubros.html', context)
     else:
         return render(request, 'buscar_rubros.html')
-
-
 
 
 
@@ -106,10 +106,8 @@ def generar_documento_word(rubros, definiciones, medicion_pagos, detalles_dict):
     doc.add_heading('Resultados de Búsqueda de Rubros', 0)
 
     for rubro in rubros:
-        # Añadir título de rubro
         doc.add_heading(f'Rubro ID: {rubro.id}', level=1)
 
-        # Crear la tabla con la primera fila de 4 columnas y las siguientes de 2 columnas
         table = doc.add_table(rows=1, cols=4)
         table.style = 'Table Grid'
 
