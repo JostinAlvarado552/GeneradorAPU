@@ -206,8 +206,15 @@
     font-weight: bold;
 }
     </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+
+
 </head>
 <body>
+<button onclick="exportToPDF()">Exportar a PDF</button>
+<div id="content">
     {% if rubros_data %}
         {% for rubro_id, rubro_data in rubros_data.items %}
             <div class="rubro-page">
@@ -236,7 +243,7 @@
                       <div class="gris3">Unidad</div>
                         <div class="blanco3">
                             <ul>
-                               M2
+                                         <li> {{ rubro_data.unidad }}</li>
                             </ul>
                         </div>
                     </div>
@@ -303,5 +310,32 @@
     {% else %}
         <p>No se encontraron datos de rubros.</p>
     {% endif %}
+</div>
+<script>
+async function exportToPDF() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'pt', 'a4');
+    const content = document.getElementById('content');
+    const options = {
+        scale: 2
+    };
+
+    const pages = content.querySelectorAll('.rubro-page');
+    for (let i = 0; i < pages.length; i++) {
+        const canvas = await html2canvas(pages[i], options);
+        const imgData = canvas.toDataURL('image/jpeg', 1.0);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+        if (i > 0) {
+            pdf.addPage();
+        }
+
+        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+    }
+
+    pdf.save('rubros.pdf');
+}
+</script>
 </body>
 </html>

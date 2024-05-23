@@ -17,17 +17,18 @@ def buscar_rubros(request):
     if request.method == 'POST':
         ids = request.POST.get('ids', '').split(',')
         rubros_data = {}
-        contador = 1  # Inicializa el contador
+        contador = 1
         for id in ids:
             try:
                 rubro = Rubros.objects.get(id=int(id))
                 definiciones = list(Definicion.objects.filter(rubro=rubro).values('contenido'))
                 especificaciones = list(Especificacion.objects.filter(rubro=rubro).values('contenido'))
-                mediciones_pagos = list(Medicion_Pago.objects.filter(rubro=rubro).values('medicion', 'metodoPago'))
+                mediciones_pagos = list(Medicion_Pago.objects.filter(rubro=rubro).values('contenido'))
                 detalles = process_id(id)
                 rubros_data[id] = {
                     'contador': f'{contador:03d}',
                     'rubro': rubro.concepto,
+                    'unidad': rubro.unidad,
                     'definiciones': definiciones,
                     'especificaciones': especificaciones,
                     'mediciones_pagos': mediciones_pagos,
