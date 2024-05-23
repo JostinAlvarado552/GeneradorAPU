@@ -285,17 +285,19 @@
                             </ul>
                         </div>
                     </div>
-                    {% for key, value in rubro_data.detalles.items %}
+                    {% for key, values in rubro_data.detalles.items %}
                         <div class="fila">
                             <div class="gris">{{ key }}</div>
                             <div class="blanco">
                                 <ul>
-                                    <li>  {{ value.nombre }} -
-                                        Cantidad: {{ value.cantidad }}</li>
+                                    {% for detail in values %}
+                                        <li>{{ detail.nombre }} - Cantidad: {{ detail.cantidad }}</li>
+                                    {% endfor %}
                                 </ul>
                             </div>
                         </div>
-                                {% endfor %}
+                    {% endfor %}
+
                     </div>
                 <div class="footer">
                     <div class="text-footer">
