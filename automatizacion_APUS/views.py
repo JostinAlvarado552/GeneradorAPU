@@ -1,17 +1,7 @@
-from docx.opc.oxml import qn, parse_xml
-from docx.oxml.ns import nsdecls
-from docx import Document
 import xlwings as xw
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-from reportlab.lib.styles import getSampleStyleSheet
 from django.contrib import messages
 from .models import Rubros, Definicion, Especificacion, Medicion_Pago
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.template.loader import render_to_string
-from xhtml2pdf import pisa
-import io
 
 def buscar_rubros(request):
     if request.method == 'POST':
