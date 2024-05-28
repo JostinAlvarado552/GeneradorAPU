@@ -1,6 +1,6 @@
 import xlwings as xw
 from django.contrib import messages
-from .models import Rubros, Definicion, Especificacion, Medicion_Pago
+from .models import Rubros, Definicion, Especificacion, Medicion_Pago, Apu, Categoria
 from django.shortcuts import render
 
 def buscar_rubros(request):
@@ -14,7 +14,16 @@ def buscar_rubros(request):
                 definiciones = list(Definicion.objects.filter(rubro=rubro).values('contenido'))
                 especificaciones = list(Especificacion.objects.filter(rubro=rubro).values('contenido'))
                 mediciones_pagos = list(Medicion_Pago.objects.filter(rubro=rubro).values('contenido'))
-                detalles = process_id(id)
+
+                # Obtener los detalles de los APUs desde la base de datos
+                detalles = {}
+                apus = Apu.objects.filter(rubro=rubro)
+                for apu in apus:
+                    categoria_nombre = apu.categoria.contenido
+                    if categoria_nombre not in detalles:
+                        detalles[categoria_nombre] = []
+                    detalles[categoria_nombre].append({'nombre': apu.contenido})
+
                 rubros_data[id] = {
                     'contador': f'{contador:03d}',
                     'rubro': rubro.concepto,
@@ -34,16 +43,6 @@ def buscar_rubros(request):
             'rubros_data': rubros_data,
         }
         print(context)
-        # html_string = render_to_string('resultado_rubros.html', context)
-        # result = io.BytesIO()
-        # pdf = pisa.CreatePDF(io.BytesIO(html_string.encode("UTF-8")), dest=result)
-        #
-        # if not pdf.err:
-        #     response = HttpResponse(result.getvalue(), content_type='application/pdf')
-        #     response['Content-Disposition'] = 'attachment; filename="rubros.pdf"'
-        #     return response
-        # else:
-        #     return HttpResponse("Error generating PDF", status=500)
         return render(request, 'resultado_rubros.html', context)
     else:
         return render(request, 'buscar_rubros.html')
@@ -53,7 +52,7 @@ def buscar_rubros(request):
 def process_id(id_value):
     Detalles = {}
     try:
-        wb = xw.Book('automatizacion_APUS/documento/APU.xlsm')
+        wb = xw.Book('automatizacion_APUS/documento/apu.xlsm')
         sheet = wb.sheets['ANALISIS']
         sheet.range('C5').value = id_value
         wb.app.calculate()
